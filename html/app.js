@@ -10,7 +10,6 @@ function uncolor_classes(all_classes, list_of_classnames_to_decolor) {
 		for (var j = 0; j < list_of_classnames_to_decolor.length; ++j) {
 			if(hasClass(item, list_of_classnames_to_decolor[j])) {
 				item.className = '';
-				//item.innerHTML = 'test_text';
 			}
 		}
 	}
@@ -25,7 +24,6 @@ function uncolor_class(className_to_decolor) {
 			item.className = 'not_'+className_to_decolor;
 		} else if(hasClass(item, 'not_'+className_to_decolor)) {
 			item.className = className_to_decolor;
-			//alert (item.className);
 		}
 
 	}
@@ -33,56 +31,27 @@ function uncolor_class(className_to_decolor) {
 
 
 function uncheck_class(flag, cl_id) {
+	// get the names and the values to attribute to the changed classes
 	var className = "check_" + flag;
 	var checkboxclassName = "checkbox_" + flag;
 	var bool_val = document.getElementById(cl_id).checked;
-	alert(bool_val);
+	if(bool_val == true){
+		var nb_val = "1";
+	}
+	else{
+		var nb_val = "0";
+	}
+	// get all elements
 	var all_classes = document.getElementsByTagName("th");
 	for (var i = 0; i < all_classes.length; ++i) {
 		var item = all_classes[i];
+		// change values only when the class is the same
 		if(hasClass(item, className) == true) {
 			var class_checkbox = item.getElementsByTagName("input")[0];
 			var individual_checkbox = all_classes[i-3].getElementsByTagName("input")[0]
-			if(class_checkbox.checked == true){
-				class_checkbox.checked = true;
-				individual_checkbox.checked = true;
-				$( class_checkbox ).prop('checked', true);
-				// $( individual_checkbox ).prop('checked', false);
-
-				// $("."+className).click(function () {
-				// 	alert("0000000");
-				// 	if (this.checked==true){
-				// 		alert("lalala");
-				// 	}
-				// 	else {
-				// 		alert('lololol')
-				// 	}
-				// });
-			}
-
-			else {
-				class_checkbox.checked = false;
-				individual_checkbox.checked = false;
-				$( class_checkbox ).prop('checked', false);
-			}
-
-
-			// $("."+className).change(function () {
-			// 	debugger;
-			// 	if (this.checked) {
-			// 		alert("3333333");
-			// 		$("."+className).prop("checked", false);
-			// 		alert("444444");
-			// 	}
-			// 	else {
-			// 		//opposite of that in if - block
-			// 	}
-
-			// });
-
-
-			//$(class_checkbox).prop("checked", class_checkbox.checked);
-			//$("."+checkboxclassName).prop("checked", individual_checkbox.checked);
+			class_checkbox.checked = bool_val;
+			individual_checkbox.checked = bool_val;
+			individual_checkbox.value = nb_val;
 		}
 	}
 }
