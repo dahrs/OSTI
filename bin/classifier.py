@@ -2,6 +2,8 @@
 # -*- coding:utf-8 -*-
 
 import os
+import json
+import gzip
 import shutil
 import pickle
 import subprocess
@@ -25,8 +27,12 @@ def loadModel(modelFilePath):
     :param modelFilePath: path to the input file
     :return: load model
     """
-    with open(modelFilePath, u'rb') as modelFile:
-        pickleModel = pickle.load(modelFile)
+    if ".gz" in modelFilePath:
+        with gzip.open(modelFilePath, 'rb') as modelFile:
+            pickleModel = pickle.load(modelFile)
+    else:
+        with open(modelFilePath, u'rb') as modelFile:
+            pickleModel = pickle.load(modelFile)
     return pickleModel
 
 
@@ -57,7 +63,7 @@ def appendAdditionalFeat(featList):
 
 def loadRfModel():
     try:
-        rfModel = loadModel("./resources/classifiers/bal_train_7M_scoresAndMetaData_rdmForest.pickle")
+        rfModel = loadModel("./resources/classifiers/bal_train_7M_scoresAndMetaData_rdmForest.gz")
     except FileNotFoundError:
         try:
             rfModel = loadModel("../resources/classifiers/bal_train_7M_scoresAndMetaData_rdmForest.pickle")
@@ -71,7 +77,7 @@ def loadRfModel():
 
 def loadSvmModel():
     try:
-        svmModel = loadModel("./resources/classifiers/bal_train7M_scores_svm.pickle")
+        svmModel = loadModel("./resources/classifiers/bal_train7M_scores_svm.gz")
     except FileNotFoundError:
         try:
             svmModel = loadModel("../resources/classifiers/bal_train7M_scores_svm.pickle")
@@ -188,11 +194,13 @@ def equalizeLength(srcPath, trgtPath, langOrder):
 
 
 def mkGenLablFile(outCommonPath, genLblPath):
+    with open("./configuration.json") as config:
+        configuration = json.load(config)
     gen = """
 # Modification for creating labels for Classification task and generating matched Indices for Corpus Cleaning.
 # No changes was made in LASER model, only modified the output of the model.
 
-export LASER='./resources/LASER/'
+export LASER='""" + configuration["options"]["path to laser"] + """'
 if [ -z ${LASER+x} ] ; then
   echo "Please set the environment variable 'LASER'"
   exit
@@ -237,24 +245,7 @@ def getLaserAlignAndClassif(srcFilePath, trgtFilePath, langOrder, outputFolderPa
         alignClean = [ln.replace("\n", "").split(",") for ln in aliRaw.readlines()]
         alignClean = [[int(ali[0]), int(ali[1])] for ali in alignClean]
         alignClean = [ali for ali in alignClean if (ali[0] not in indxAddedA and ali[1] not in indxAddedB)]
-    # # output the alignments
-    # with open("./tmp/laser.output.align.index", "w") as laserAlign:
-    #     with open("./tmp/laser.output.align.raliformat", "w") as laserRali:
-    #         for ali in alignClean:
-    #             # output the alignment by alignment index
-    #             laserAlign.write("{0}-{1}\n".format(ali[0], ali[1]))
-    #             # get an alignment similar to the rali format
-    #
-    #             alignRaliFormat = ["{0}-{1} 0\n".format(ali[0], ali[1]) for ali in alignClean]
-    # # output the alignment in rali format
-    #
-    #     for lasAlignLn in alignRaliFormat:
-    #         laserRali.write(lasAlignLn)
-    # # output the alignment lines
-    # with open("./tmp/laser.output.segment.{0}".format(langOrder[0]), "w") as segmentSrcFile:
-    #     with open("./tmp/laser.output.segment.{0}".format(langOrder[0]), "w") as segmentTrgtFile:
-
-    # get the laser predictions into two lists goods and bads
+    # get the laser predictions into two lists: goods and bads
     noErrLst, errLst = [], []
     lsrPathA = lsrSrcPath if sorted(langOrder) == langOrder else lsrTrgtPath
     lsrPathB = lsrTrgtPath if sorted(langOrder) == langOrder else lsrSrcPath

@@ -46,10 +46,11 @@ def getHeaderAndFootWithBar():
     header += """      <table border="0px">\n        </tr>\n"""
     for txt, err in navCheckboxes.items():
         header += """      <th><label class="container">{0}\n""".format(txt)
-        header += """        <input type="checkbox" checked="checked"  onchange="uncolor_class('{0}')">\n""".format(err)
+        header += """        <input type="checkbox" checked="checked"  onclick="uncolor_class('{0}')">\n""".format(err)
         header += """        <span class="checkmark"></span>\n        </label></th>\n"""
     header += """        </tr>\n      </table>\n    </div>\n"""
-    foot = """    <script src="app.js"></script>  </body>\n  </html>"""
+    foot = """    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>\n"""
+    foot += """    <script src="app.js"></script>  </body>\n  </html>"""
     return header, foot
 
 
@@ -57,7 +58,11 @@ def getHeaderAndFoot():
     # header metadata and css internal stylesheet
     header = """\n<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="utf-8" />\n"""
     header += """    <link rel="stylesheet" href="styles.css">  </head>\n  <body>\n"""
-    foot = """    <script src="app.js"></script>  </body>\n  </html>"""
+    foot = """    <div class="container">\n      <div class="vertical-center">\n"""
+    foot += """<button type="button" class="button greybutton" onclick="to_tmx()">Selection to TMX</button>"""
+    foot += """\n      </div>\n    </div>\n\n    <p>&nbsp;</p>\n"""
+    foot += """<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>\n"""
+    foot += """<script src="app.js"></script>  </body>\n</html>"""
     return header, foot
 
 
@@ -133,27 +138,28 @@ def makeHtmlFromTmx(tmxFilePath, outputPath=None, verbose=False):
     # table header with instructions
     table += """    <thead>\n        <tr>\n"""
     table += """          <th colspan="2" class="instructions">Click on the INDEX checkbox to remove the line.</th>\n"""
-    table += """          <th colspan="2" class="instructions">Click on the COMMENT checkbox to remove all the lines with that label.</th>\n        </tr>\n      </thead>\n"""
+    table += """          <th colspan="2" class="instructions">Click on the LABEL checkbox to remove all the lines with that same label.</th>\n        </tr>\n      </thead>\n"""
     # table header
     table += """    <thead>\n        <tr>\n          <th>Index</th>\n"""
     table += """          <th>{0}</th>\n          <th>{1}</th>\n""".format(tmxContent[0][0][1].upper(),
                                                                            tmxContent[0][1][1].upper())
-    table += """          <th>Comment</th>\n        </tr>\n      </thead>\n"""
+    table += """          <th>Label</th>\n        </tr>\n      </thead>\n"""
     # table body
     for indTu, tuFLT in enumerate(tmxContent):
         txtSrc = tuFLT[0][2] if tuFLT[0][2] is not None else ""
         flag = tuFLT[0][0]
         txtTrgt = tuFLT[1][2] if tuFLT[1][2] is not None else ""
+        checked = '''"1" checked''' if flag in ["silver", "gold"] else '''"0"'''
         table += """      <tr>\n        <th>"""
-        table += """<input type="checkbox" checked="checked"  onchange="remove_id('{0}')">""".format(indTu + 1)
-        table += """{0}</th>\n        <th id="s{0}" class="{1}">{2}</th>\n""".format(indTu + 1, flag, txtSrc)
-        table += """        <th id="t{0}" class="{1}">{2}</th>\n""".format(indTu + 1, flag, txtTrgt)
+        table += """<input type="checkbox" id="ln{0}" onclick="change_value(this.id)" value={1}>""".format(indTu + 1, checked)
+        table += """{0}</th>\n        <th id="src{0}" class="{1}">{2}</th>\n""".format(indTu + 1, flag, txtSrc)
+        table += """        <th id="trgt{0}" class="{1}">{2}</th>\n""".format(indTu + 1, flag, txtTrgt)
         # add comment
         if verbose is False:
-            table += """        <th><input type="checkbox" checked="checked"  onchange="remove_class('{0}')">""".format(flag)
+            table += """        <th class="check_{1}"><input type="checkbox" id="cl{2}" class="checkbox_{1}" onclick="uncheck_class('{1}', 'cl{2}')" value={0}>""".format(checked, flag, indTu + 1)
             table += """{0}</th>\n      </tr>\n""".format(plainLabel(flag))
         else:
-            table += """        <th><input type="checkbox" checked="checked"  onchange="remove_class('{0}')">""".format(flag)
+            table += """        <th class="check_{1}"><input type="checkbox" id="cl{2}" class="checkbox_{1}" onclick="uncheck_class('{1}', 'cl{2}')>" value={0}""".format(checked, flag, indTu + 1)
             table += """{0}</th>\n      </tr>\n""".format(verboseFloatScore(flag, tuFLT[0][3]))
     table += """    </table>\n"""
     htmlPage = "{0}{1}{2}".format(header, table, foot)
@@ -179,4 +185,4 @@ def makeHtmlFromTmx(tmxFilePath, outputPath=None, verbose=False):
                 pass
     return htmlPage
 
-makeHtmlFromTmx("./tmp/aligned.tmx", outputPath="./html/index.html", verbose=False)
+makeHtmlFromTmx("../tmp/aligned.tmx", outputPath="../html/index.html", verbose=False)

@@ -5,29 +5,76 @@ th {
   font-size: 75%;
 }
 
-.error { background-color:#d8a6ff; }
+.alignment_error { background-color:#ff3030; }
 
-.alignment_error { background-color:#ffb4ad; }
+.n_alignment_error { background-color:#ff3030; }
 
-.alignment_not_found { background-color:#ffb4ad; }
+.quality_error { background-color:#ff6e6e; }
 
-.quality_error { background-color:#ffcb94; }
+.gibberish { background-color:#fc9797; }
 
-.gibberish { background-color:#fff459; }
+.error { background-color:#ffcccc; }
 
-.no_error { background-color:#c8ffa3; }
+.silver { background-color:#e6fad2; }
 
-.silence { background-color:#fbfbfb; }
+.gold { background-color:#abff8f; }
 
 
-.error_comment { color: #460057; }
 
-.alignment_comment { color: #ad1000; }
+.error_comment { color: #453d00; }
 
-.quality_comment { color: #9e2f00; }
+.alignment_comment { color: #6b0326; }
 
-.gibberish_comment { color: #7a5e00; }
+.quality_comment { color: #6b0f04; }
 
+.gibberish_comment { color: #6b3604; }
+
+
+.instructions { 
+  background-color: #333;
+  font-size: 16px;
+  color: #eee; }
+
+
+.header { 
+  background-color: #ededed;
+  font-size: 16px;}
+
+
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  background-color: #555555;
+  border-radius: 10px;
+}
+
+.greybutton:hover {
+  background-color: #a8a8a8;
+  color: #404040;
+}
+
+
+.container {
+  height: 100px;
+  position: relative;
+}
+
+.vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
 
 
  /* from https://www.w3schools.com/howto/howto_css_fixed_menu.asp */

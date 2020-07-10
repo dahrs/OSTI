@@ -12,7 +12,10 @@ from bin.classifier import loadSvmModel
 from bin.classifier import getBoolClassifPred
 from bin.classifier import getLaserAlignAndClassif
 from bin.metaheuristics import getBoolAndTypePreds
-from resources.vecalign.vecalign_wrap import makeVecAlign
+try:
+    from resources.vecalign.vecalign_wrap import makeVecAlign
+except ImportError:
+    pass
 
 
 def segment(filePath):
