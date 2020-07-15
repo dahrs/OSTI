@@ -1,5 +1,5 @@
 # Project description
-**OSTI** is an open-source tool to process and visualize a pair of bilingual documents (original and translation) into automatically labeled sentence pairs.  For a translation professional it can be used as a human-accessible quality evaluation tool, as a pre-processing step for human annotation as well as an intermediate step to populate a Translation Memory. The OSTI system is thought to process Englis-French or French-English bitexts. Any other language pair requires modifications to the code. 
+**OSTI** is an open-source tool to process and visualize a pair of bilingual documents (original and translation) into automatically labeled sentence pairs.  For a translation professional it can be used as a human-accessible quality evaluation tool, as a pre-processing step for human annotation as well as an intermediate step to populate a Translation Memory. **OSTI** is made to process English-French or French-English bitexts. Any other language pair requires modifications to the code. 
 
 ## Dependencies and installation
 
@@ -55,8 +55,8 @@ python main.py -insrc path/to/the/source.file -intrgt path/to/the/target.file -l
 ```
 
 The available argument flags are :
-* *-insrc* or *--inputsource* : (required), path to the Source file in *.txt* format using *utf-8* encoding.
-* *-intrgt* or *--inputtarget* : (required), path to the Target file in *.txt* format using *utf-8* encoding.
+* *-insrc* or *--inputsource* : (required), path to the Source file in plain text format (*.txt*) using *utf-8* encoding.
+* *-intrgt* or *--inputtarget* : (required), path to the Target file in plain text format (*.txt*) using *utf-8* encoding.
 
 * *-lsrc* or *--langsource* : (optional, English \[en\] by default), two letter code (ISO 639-1) for the language of the Source file.
 * *-ltrgt* or *--langtarget* : (optional, French \[fr\] by default), two letter code (ISO 639-1) for the language of the Target file.
