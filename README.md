@@ -68,7 +68,7 @@ The available argument flags are :
 * *-html* or *--outputfolder* : (optional, unspecified by default), path to the html file that serves as user platform. It is advised to leave this argument undefined, in which case, the system will overwrite the existing file at *html/index.html*.
 
 
-![OSTI pipeline](./paper/pipeline.pdf)
+![OSTI pipeline](./paper/pipeline.png)
 
 
 ## Examples
