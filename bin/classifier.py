@@ -245,6 +245,23 @@ def getLaserAlignAndClassif(srcFilePath, trgtFilePath, langOrder, outputFolderPa
         alignClean = [ln.replace("\n", "").split(",") for ln in aliRaw.readlines()]
         alignClean = [[int(ali[0]), int(ali[1])] for ali in alignClean]
         alignClean = [ali for ali in alignClean if (ali[0] not in indxAddedA and ali[1] not in indxAddedB)]
+    # # output the alignments
+    # with open("./tmp/laser.output.align.index", "w") as laserAlign:
+    #     with open("./tmp/laser.output.align.raliformat", "w") as laserRali:
+    #         for ali in alignClean:
+    #             # output the alignment by alignment index
+    #             laserAlign.write("{0}-{1}\n".format(ali[0], ali[1]))
+    #             # get an alignment similar to the rali format
+    #
+    #             alignRaliFormat = ["{0}-{1} 0\n".format(ali[0], ali[1]) for ali in alignClean]
+    # # output the alignment in rali format
+    #
+    #     for lasAlignLn in alignRaliFormat:
+    #         laserRali.write(lasAlignLn)
+    # # output the alignment lines
+    # with open("./tmp/laser.output.segment.{0}".format(langOrder[0]), "w") as segmentSrcFile:
+    #     with open("./tmp/laser.output.segment.{0}".format(langOrder[0]), "w") as segmentTrgtFile:
+
     # get the laser predictions into two lists: goods and bads
     noErrLst, errLst = [], []
     lsrPathA = lsrSrcPath if sorted(langOrder) == langOrder else lsrTrgtPath

@@ -335,7 +335,9 @@ def segmentAlignMakeTmx(srcFilePath, trgtFilePath, langOrder, aligner=True, clas
     # remove content of embedding folder
     removeEmbed()
     # tmx
-    overwrt = True if outputTmxPath is not None else False
-    tmxPath, tmxAllLabelsPath = fromAlignTxtToTmx(srcSegmPath, trgtSegmPath, srcAlignedPath, trgtAlignedPath, langOrder, classif=classif,
-                                laserClassif=lsrClassif, outputTmxPath=outputTmxPath, overwrite=overwrt)
+    overwrt = True if outputTmxPath is None else False
+    outputTmxPath = "./tmp/aligned.tmx" if outputTmxPath is None else outputTmxPath
+    tmxPath, tmxAllLabelsPath = fromAlignTxtToTmx(srcSegmPath, trgtSegmPath, srcAlignedPath, trgtAlignedPath, langOrder,
+                                                  classif=classif, laserClassif=lsrClassif,
+                                                  outputTmxPath=outputTmxPath, overwrite=overwrt)
     return tmxPath, tmxAllLabelsPath
