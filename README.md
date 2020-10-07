@@ -29,7 +29,8 @@ For an optimal use of the aligners and classifiers of this system, it is recomme
   * https://github.com/thompsonb/vecalign/archive/master.zip 
   * or  https://github.com/thompsonb/vecalign
 * **LASER** : 
-  * https://github.com/facebookresearch/LASER/archive/master.zip
+  * https://github.com/bhardwaj1230/LASER---CorpusCleaning-Classification
+  * or https://github.com/facebookresearch/LASER/archive/master.zip
   * or  https://github.com/facebookresearch/LASER
 
 Follow the instructions to install each of them :
