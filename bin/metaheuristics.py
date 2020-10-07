@@ -853,7 +853,6 @@ def punctAndSymb(stringSrc, stringTrgt, addInfo=False):
     # otherwise return the score and metadata
     avgPunctSymbLen = (float(len(srcPunctAndSymb)) + float(len(trgtPunctAndSymb))) / 2.0
     scPs = (float(len(intersection)) / avgPunctSymbLen)
-    print(222222, scPs, (float(len(intersection)), avgPunctSymbLen))
     if addInfo is False:
         return scPs
     return scPs, len(intersection), len(srcPunctAndSymb), len(trgtPunctAndSymb)
@@ -1035,7 +1034,6 @@ def getTypePred(stringSrc, stringTrgt, langOrder=None, humanReadable=False, dm=N
     dm = getAllHeurScores(stringSrc, stringTrgt, langOrder) if dm is None else dm
     # decision order : nb(0) len(1) cog(2) fa(3) ion(4) sw(5) spell(6) url(7) mono(8) wbw(9) punct(10) gibb(11) tabl(12)
     d = [dm[0], dm[2], dm[4], dm[6], dm[8], dm[10], dm[12], dm[14], dm[16], dm[18], dm[20], dm[22], dm[24]]
-    print(333333333333, d)
     # absence of errors : nb len wbw punct
     noError = len([t for t in [d[0], d[1], d[9], d[10]] if t is True])
     # alignment error : nb len cog ion sw url wbw punct
@@ -1113,12 +1111,5 @@ def getBoolAndTypePreds(stringSrc, stringTrgt, langOrder=None, humanReadable=Fal
     typeClass = getTypePred(stringSrc, stringTrgt, langOrder, humanReadable, dm)
     return boolClass, typeClass, dm
 
-t = getTypePred("The currency in Angola is the kwanza (AOA).",
-                "The currency in Angola is the kwanza (AOA).",
-                langOrder=['en', 'fr'], humanReadable=True, dm=None)
-print(t)
-t = getTypePred("* The currency in Angola is the kwanza (AOA).",
-                "* Ladevise in Angola est lKwanza (AOA).",
-                langOrder=['en', 'fr'], humanReadable=True, dm=None)
+
 # nb(0) len(1) cog(2) fa(3) ion(4) sw(5) spell(6) url(7) mono(8) wbw(9) punct(10) gibb(11) tabl(12)
-print(t)
