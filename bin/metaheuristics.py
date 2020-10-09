@@ -3,7 +3,6 @@
 
 import re
 import os
-import sys
 import json
 import nltk
 import math
@@ -12,11 +11,16 @@ from nltk.metrics import distance
 
 
 ########################################################################
-# HEURISTIC TOOLS
+# BASIC TOOLS
 ########################################################################
 
+def createEmptyFolder(folderPath):
+    """ given a non existing folder path, creates the necessary folders so the path exists """
+    if not os.path.exists(folderPath):
+        os.makedirs(folderPath)
+
 def appendLineToFile(stringLine, filePath, addNewLine=True):
-    if not theFileExists(filePath):
+    if not os.path.isfile(filePath):
         createEmptyFolder(filePath.replace(filePath.split(u"/")[-1], u""))
         with open(filePath, 'w') as emptyFile:
             emptyFile.write(u'')
@@ -25,6 +29,10 @@ def appendLineToFile(stringLine, filePath, addNewLine=True):
     with open(filePath, 'a') as file:
         file.write(stringLine)
 
+
+########################################################################
+# HEURISTIC TOOLS
+########################################################################
 
 def isItAlphaNumeric(char):
     """ given a character, returns True if it's alphanumeric ( ASCII alone: [a-zA-Z0-1] ), False otherwise """
@@ -1044,16 +1052,16 @@ def getTypePred(stringSrc, stringTrgt, langOrder=None, humanReadable=False, dm=N
     gibbError = 1 if d[11] is False else 0
     # predict the type of error encountered (no error, alignment error, quality error, gibberish)
     if noError > alignError and noError > qualError and noError > gibbError:
-        noErrorScore = noError/(noError+(sum([alignError, qualError])/2.0))
+        noErrorScore = noError / (noError + (sum([alignError, qualError]) / 2.0))
         return [0, noErrorScore] if humanReadable is not True else ["gold", noErrorScore]
     elif gibbError == 1:
-        gibbErrorScore = 1/(1+noError)
+        gibbErrorScore = 1 / (1 + noError)
         return [3, gibbErrorScore] if humanReadable is not True else ["gibberish", gibbErrorScore]
     elif alignError > qualError:
-        alignErrorScore = alignError/(alignError+qualError+noError)
+        alignErrorScore = alignError / (alignError + qualError + noError)
         return [1, alignErrorScore] if humanReadable is not True else ["alignment_error", alignErrorScore]
     elif qualError > 0:
-        qualErrorScore = qualError/(qualError+alignError+noError)
+        qualErrorScore = qualError / (qualError + alignError + noError)
         return [2, qualErrorScore] if humanReadable is not True else ["quality_error", qualErrorScore]
     # silence : uncertain to determine
     return [None, 1.0] if humanReadable is not True else ["silver", 1.0]
@@ -1110,6 +1118,5 @@ def getBoolAndTypePreds(stringSrc, stringTrgt, langOrder=None, humanReadable=Fal
         boolClass = getBoolPred(stringSrc, stringTrgt, langOrder, humanReadable, dm)
     typeClass = getTypePred(stringSrc, stringTrgt, langOrder, humanReadable, dm)
     return boolClass, typeClass, dm
-
 
 # nb(0) len(1) cog(2) fa(3) ion(4) sw(5) spell(6) url(7) mono(8) wbw(9) punct(10) gibb(11) tabl(12)

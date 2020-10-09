@@ -63,7 +63,7 @@ def appendAdditionalFeat(featList):
 
 def loadRfModel():
     try:
-        rfModel = loadModel("./resources/classifiers/bal_train_7M_scoresAndMetaData_rdmForest.gz")
+        rfModel = loadModel("./resources/classifiers/bal_train_7M_scoresAndMetaData_rdmForest.pickle.gz")
     except FileNotFoundError:
         try:
             rfModel = loadModel("../resources/classifiers/bal_train_7M_scoresAndMetaData_rdmForest.pickle")
@@ -77,7 +77,7 @@ def loadRfModel():
 
 def loadSvmModel():
     try:
-        svmModel = loadModel("./resources/classifiers/bal_train7M_scores_svm.gz")
+        svmModel = loadModel("./resources/classifiers/bal_train7M_scores_svm.pickle.gz")
     except FileNotFoundError:
         try:
             svmModel = loadModel("../resources/classifiers/bal_train7M_scores_svm.pickle")

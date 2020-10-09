@@ -118,12 +118,15 @@ def verboseFloatScore(flagType, flagScore):
 
 def plainLabel(flagType):
     commentDict = {"gold": "GOLD (very good)",
+                   "no_error": "GOLD (very good)",
                    "alignment_error": """<span class="alignment_comment">ALIGNMENT ERROR</span>""",
                    "quality_error": """<span class="quality_comment">QUALITY ERROR</span>""",
                    "error": """<span class="error_comment">ERROR</span>""",
                    "gibberish": """<span class="gibberish_comment">GIBBERISH</span>""",
                    "n_alignment_error": """<span class="alignment_comment">ALIGNMENT ERROR</span>""",
+                   "alignment_not_found": """<span class="alignment_comment">ALIGNMENT ERROR</span>""",
                    "silver": "SILVER (good)",
+                   "silence": "SILVER (good)",
                    None: ""}
     return commentDict[flagType]
 
@@ -184,5 +187,3 @@ def makeHtmlFromTmx(tmxFilePath, outputPath=None, verbose=False):
             except FileNotFoundError:
                 pass
     return htmlPage
-
-makeHtmlFromTmx("../tmp/aligned.tmx", outputPath="../html/index.html", verbose=False)

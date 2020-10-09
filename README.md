@@ -37,12 +37,14 @@ Follow the instructions to install each of them :
 * **VecAlign** : https://github.com/thompsonb/vecalign/blob/master/README.md
 * **LASER** : https://github.com/facebookresearch/LASER/blob/master/README.md)
 
-You may install them directly into the *resources/* folder or you may replace the values for *'path to vecalign'* and *'path to laser'* (in the *configuration.json* file, under *'options'*) so they match the correct corresponding paths. 
+**IMPORTANT!!!** If you choose **NOT** to install them directly into the *resources/* folder, you **must** replace the values for *'path to vecalign'* and *'path to laser'* (in the *configuration.json* file, under *'options'*) so they match the correct corresponding paths. 
 
 We HIGHLY recommend that the **VecAlign** toolkit be installed or copied into the *resources/vecalign/* folder,
-making sure not delete the *vecalign\_wrap.py* file (which can also be found in *resources/wrap/*).
-If you choose NOT to install the **VecAlign** toolkit in *resources/vecalign* then, you will need to copy
-the *vecalign\_wrap.py* file into the folder it is installed on and change the explicit relative import path in
+making sure to not delete the *resources/vecalign/vecalign\_wrap.py* file 
+(which can also be found in *resources/wrap/vecalign\_wrap.py*).
+
+**IMPORTANT!!!** If you choose **NOT** to install the **VecAlign** toolkit in *resources/vecalign* then, you will need to copy
+the *resources/wrap/vecalign\_wrap.py* file into the folder it is installed on **AND** change the explicit relative import path in
 line 16 of the *bin/txt2tmx.py* file to match its correct location.
 
 ## Use
@@ -104,6 +106,8 @@ bibtex
 ## Contacts
 
 [David Alfonso-Hermelo](http://www-etud.iro.umontreal.ca/~alfonsda/), Laboratoire en Recherche Appliquée en Linguistique Informatique (RALI), Université de Montreal, Qc, Canada (david_dot_alfonso_dot_hermelo_at_gmail_dot_com)
+
 [Shivendra Bhardwaj](https://www.linkedin.com/in/shivendra-bhardwaj-911a7038/), Laboratoire en Recherche Appliquée en Linguistique Informatique (RALI), Université de Montreal, Qc, Canada and National Research Council Canada (CNRC/NRC), Ottawa, On, Canada (shivendra_dot_bhardwaj_at_umontreal_dot_ca)
+
 [Philippe Langlais](https://www.iro.umontreal.ca/~felipe/new-home/frontal.php?page=resume.html), Laboratoire en Recherche Appliquée en Linguistique Informatique (RALI), Université de Montreal, Qc, Canada (felipe_at_iro_dot_umontreal_dot_ca )
 

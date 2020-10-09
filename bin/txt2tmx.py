@@ -227,8 +227,8 @@ def getFlag(classif, srcLn, trgtLn, langOrder, noErrLst=None, errLst=None):
     return ''' flag="true" flag_date="{0}" flag_type="{1}" flag_score="{2}"'''.format(dt, flagClass, score)
 
 
-def fromAlignTxtToTmx(srcSegmentPath, trgtSegmentPath, srcAlignedPath, trgtAlignedPath, langOrder, rmEmptyLns=True, classif=True,
-                      outputTmxPath=None, overwrite=True, laserClassif=None):
+def fromAlignTxtToTmx(srcSegmentPath, trgtSegmentPath, srcAlignedPath, trgtAlignedPath, langOrder, rmEmptyLns=True,
+                      classif=True, outputTmxPath=None, overwrite=True, laserClassif=None):
     outputTmxPath = "./tmp/aligned.tmx" if outputTmxPath is None else outputTmxPath
     head = """<tmx version="1.4b">\n  <header\n    creationtool="RALIYasaAligner" creationtoolversion="0.1"\n    datatype="PlainText" segtype="phrase"\n    adminlang="en-US" srclang="{0}"\n    o-tmf="TMX"/>\n  <body>\n""".format(langOrder[0])
     foot = """  </body>\n</tmx>"""
@@ -240,7 +240,20 @@ def fromAlignTxtToTmx(srcSegmentPath, trgtSegmentPath, srcAlignedPath, trgtAlign
         trgtAlignLns = trgtFile.readlines()
     # LASER
     # starttime = time.time()  ##################################
-    if classif in ["laser", True, None]:
+    # if the classifier was not specified use LASER as the default
+    if classif in [True, None]:
+        if laserClassif is None:
+            try:
+                noErrLst, errLst = getLaserAlignAndClassif(srcSegmentPath, trgtSegmentPath, langOrder,
+                                                           outputFolderPath="./tmp/")
+            # LASER is the default but if laser does not work, swap to SVM
+            except FileNotFoundError:
+                classif = "svm"
+                noErrLst, errLst = None, None
+        else:
+            noErrLst, errLst = laserClassif
+    # if the classifier was specified as LASER
+    elif classif in ["laser"]:
         if laserClassif is None:
             noErrLst, errLst = getLaserAlignAndClassif(srcSegmentPath, trgtSegmentPath, langOrder,
                                                        outputFolderPath="./tmp/")

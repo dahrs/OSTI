@@ -1,14 +1,13 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 
-import sys
 import time
 import argparse
 from bin.txt2tmx import segmentAlignMakeTmx
 from bin.tmx2html import makeHtmlFromTmx
 
 """
- Copyright (c) 2019-2021 Laboratoire de Recherche appliquee en linguistique informatique (RALI Laboratory)
+ Copyright (c) 2019-2021 Laboratoire de Recherche Appliquee en Linguistique Informatique (RALI Laboratory)
  rali.iro.umontreal.ca
  @author david.alfonso.hermelo@gmail.com
  @author shivendra.bhardwaj@umontreal.ca 
@@ -24,6 +23,10 @@ from bin.tmx2html import makeHtmlFromTmx
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
+ 
+ Unless otherwise expressed by the authors, any issues or requests should 
+ be expressed through the Github page of the project:
+ https://github.com/dahrs/OSTI
 """
 
 
@@ -37,19 +40,27 @@ def launchIt(inSrc, inTrgt, langOrder, aligner, classif, outHtml="./html/", outT
 
 
 if __name__ == '__main__':
+    """
+    example:
+    python main.py -insrc ./test.en -lsrc en -intrgt ./test.fr -ltrgt fr   
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("-insrc", "--inputsource", type=str, default="None", help="path to the Source file")
     parser.add_argument("-intrgt", "--inputtarget", type=str, default="None", help="path to the Target file")
-    parser.add_argument("-lsrc", "--langsource", type=str, default="en", help="language of the Source file")
-    parser.add_argument("-ltrgt", "--langtarget", type=str, default="fr", help="language of the Target file")
+    parser.add_argument("-lsrc", "--langsource", type=str, default="en",
+                        help="""ISO 639-1 language code of the Source file:
+                        en, fr""")
+    parser.add_argument("-ltrgt", "--langtarget", type=str, default="fr",
+                        help="""ISO 639-1 language code of the Target file:
+                        en, fr""")
     parser.add_argument("-html", "--outputfolder", type=str, default="None", help="path to the output folder")
     parser.add_argument("-tmx", "--outputtmx", type=str, default="None", help="path to the output tmx file")
     parser.add_argument("-ali", "--aligner", type=str, default="None",
                         help="""string indicating what aligner should the script use to show potential errors: 
-                        none, yasa, vecalign""")
+                        yasa, vecalign, None (yasa by default)""")
     parser.add_argument("-cls", "--classifier", type=str, default="None",
                         help="""string indicating what classifier should the script use to show potential errors: 
-                        none, metaheuristic, randomforest, svm, laser""")
+                        metaheuristic, randomforest, svm, laser, None (laser by default, unless badly configured)""")
     args = parser.parse_args()
 
     classifDict = {"metaheuristic": "metaheuristic", "meta": "metaheuristic", "metah": "metaheuristic",
@@ -63,7 +74,7 @@ if __name__ == '__main__':
     aligner = "yasa" if args.aligner.lower() not in ["vecalign", "laser", "vector"] else "vecaligner"
     classif = None if args.classifier.lower() not in classifDict else classifDict[args.classifier.lower()]
     outHtml = "./html/" if args.outputfolder == "None" else args.outputfolder
-    outTmx ="./tmp/aligned.tmx" if args.outputtmx == "None" else args.outputtmx
+    outTmx = "./tmp/aligned.tmx" if args.outputtmx == "None" else args.outputtmx
 
     startTime = time.time()
 
