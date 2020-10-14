@@ -229,7 +229,7 @@ def getFlag(classif, srcLn, trgtLn, langOrder, noErrLst=None, errLst=None):
 
 def fromAlignTxtToTmx(srcSegmentPath, trgtSegmentPath, srcAlignedPath, trgtAlignedPath, langOrder, rmEmptyLns=True,
                       classif=True, outputTmxPath=None, overwrite=True, laserClassif=None):
-    outputTmxPath = "./tmp/aligned.tmx" if outputTmxPath is None else outputTmxPath
+    outputTmxPath = "./tmp/aligned.tmx" if outputTmxPath is None else outputTmxPath.replace(".tmx", "_aligned.tmx")
     head = """<tmx version="1.4b">\n  <header\n    creationtool="RALIYasaAligner" creationtoolversion="0.1"\n    datatype="PlainText" segtype="phrase"\n    adminlang="en-US" srclang="{0}"\n    o-tmf="TMX"/>\n  <body>\n""".format(langOrder[0])
     foot = """  </body>\n</tmx>"""
     contentList = []
@@ -284,7 +284,7 @@ def fromAlignTxtToTmx(srcSegmentPath, trgtSegmentPath, srcAlignedPath, trgtAlign
     # dump the translation memory (only good/neutral sentences)
     # contentList = [ln for ln in contentList if (
     #             'flag_type="silence"' in ln or 'flag_type="no_error"' in ln or "flag_type='silence'" in ln or "flag_type='no_error'" in ln or "<tu>" in ln)]
-    contentList = [ln for ln in contentList if re.match('''.+(flag_type=["'](silence|no_error)["']|<tu>)''', ln)]
+    contentList = [ln for ln in contentList if re.match('''.+(flag_type=["'](silence|no_error|silver|gold)["']|<tu>)''', ln)]
     tmxContent = head + "".join(contentList) + foot
     with open(outputTmxPath, "w") as outputFile:
         outputFile.write(tmxContent)
@@ -349,7 +349,6 @@ def segmentAlignMakeTmx(srcFilePath, trgtFilePath, langOrder, aligner=True, clas
     removeEmbed()
     # tmx
     overwrt = True if outputTmxPath is None else False
-    outputTmxPath = "./tmp/aligned.tmx" if outputTmxPath is None else outputTmxPath
     tmxPath, tmxAllLabelsPath = fromAlignTxtToTmx(srcSegmPath, trgtSegmPath, srcAlignedPath, trgtAlignedPath, langOrder,
                                                   classif=classif, laserClassif=lsrClassif,
                                                   outputTmxPath=outputTmxPath, overwrite=overwrt)

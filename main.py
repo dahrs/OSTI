@@ -74,7 +74,10 @@ if __name__ == '__main__':
     aligner = "yasa" if args.aligner.lower() not in ["vecalign", "laser", "vector"] else "vecaligner"
     classif = None if args.classifier.lower() not in classifDict else classifDict[args.classifier.lower()]
     outHtml = "./html/" if args.outputfolder == "None" else args.outputfolder
-    outTmx = "./tmp/aligned.tmx" if args.outputtmx == "None" else args.outputtmx
+    outTmx = None if args.outputtmx == "None" else args.outputtmx
+
+    if classif is None:
+        print("Non-specified or unsupported classifier, switching to LASER")
 
     startTime = time.time()
 

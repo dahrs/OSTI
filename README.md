@@ -5,16 +5,23 @@
 
 ### OSTI requirements
 
-The library works with python 3.6+ and the depencies can be installed using the 'pip' library by typing the following command in the terminal :
+The library works with python 3.6+ and the depencies can be installed by EITHER executing the setup.py file using python :
+
+```bash
+python setup.py
+```
+
+OR using the 'pip' library by typing the following command in the terminal :
 
 ```bash
 pip install -r requirements.txt
 ```
 
-or by executing the setup.py file using python :
-
-```bash
-python setup.py
+followed by :
+```python
+import nltk
+nltk.download('punkt')
+exit()
 ```
 
 ### Inlcuded tools
@@ -67,16 +74,19 @@ The available argument flags are :
 * *-ali* or *--aligner* : (optional, YASA \[yasa\] by default), string indicating what aligner should the script use. Accepted values : *yasa*, *vecalign*.
 * *-cls* or *--classifier* : (optional, LASER \[laser\] by default), string indicating what classifier should the script use. Accepted values : *laser*, *randomforest*, *svm*, *metaheuristic*.
 
-* *-tmx* or *--outputtmx* : (optional, unspecified by default), path to the intermediary tmx file. If the file is unspecified, the system will overwrite the temporary file at *tmp/aligned.tmx*. If a file is specified, then the system will append the new tmx output to the existing file.
-* *-html* or *--outputfolder* : (optional, unspecified by default), path to the html file that serves as user platform. It is advised to leave this argument undefined, in which case, the system will overwrite the existing file at *html/index.html*.
+* *-tmx* or *--outputtmx* : (optional, unspecified by default), path to the intermediary tmx file. If the file is unspecified, the system will overwrite the temporary files at *tmp/aligned.tmx* and *tmp/aligned_all_labeled.tmx*. If a file is specified, then the system will create a file with a name ending in "*_aligned.tmx*" in the same folder. This file contains the data from the specified tmx file and the new data classified as GOOD. This "*_aligned.tmx*" file serves as a ready-made Translation Memory, requiring no further annotation. Another file with a name ending in "*_all_labeled.tmx*" will be created in the same folder. It will contain both GOOD and BAD sentence pairs and serve as reference as base for the html file (see below).
+* *-html* or *--outputfolder* : (optional, unspecified by default), path to the html file that serves as user platform. It is advised to leave this argument undefined, in which case, the system will overwrite the existing file at *html/index.html*. The user can open the file *html/index.html* in any web browser to manually select what sentences or classes of sentences should end up in the final tmx file.
 
 
+## System pipeline visualization
 ![OSTI pipeline](./paper/pipeline.png)
 
 
 ## Examples
 
 ```
+python main.py -insrc ./test.en -intrgt ./test.fr
+
 python main.py -insrc ./tourism_advisory.txt -intrgt ./avertissement_touristique.txt
 
 python main.py -insrc ./tourism_advisory.txt -intrgt ./avertissement_touristique.txt -lsrc en -ltrgt fr
@@ -86,6 +96,10 @@ python main.py -insrc ./avertissement_touristique.txt -intrgt ./tourism_advisory
 python main.py -insrc ./tourism_advisory.txt -intrgt ./avertissement_touristique.txt -lsrc en -ltrgt fr -ali yasa -cls laser
 
 python main.py -insrc ./tourism_advisory.txt -intrgt ./avertissement_touristique.txt -lsrc en -ltrgt fr -ali vecalign -cls metaheuristic
+
+python main.py -insrc ./tourism_advisory.txt -intrgt ./avertissement_touristique.txt -lsrc en -ltrgt fr -ali yasa -cls randomforest -tmx ./tourism_translation_memory.tmx
+
+python main.py -insrc ./tourism_advisory.txt -intrgt ./avertissement_touristique.txt -lsrc en -ltrgt fr -ali yasa -cls svm -tmx ./tourism_translation_memory.tmx -html ./to_be_hand_picked.hmtl
 ```
 
 ## Output
