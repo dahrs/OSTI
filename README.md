@@ -106,7 +106,9 @@ python main.py -insrc ./tourism_advisory.txt -intrgt ./avertissement_touristique
 
 For source and target files containing 900 sentences each, the running time can take up to 5 minutes (measured on a personal computer with 30Gb of RAM, a 12-core CPU and a GeForce GT 1030 GPU) depending on the aligner and classifier used.
 
-After *main.py* finishes running, an early version of the final tmx will appear in the specified location (*tmp/aligned.tmx* by default) and an html file will be created in the specified location (*html/index.html* by default). The user can then open the html file (with the web browser of his/her choice) to verify the accuracy of the classification and correct it if needed. A button on the bottom of the html page will allow to save the final tmx file to the location of his/her choice.
+After *main.py* finishes running, an early version of the final tmx will appear in the specified location (*tmp/aligned.tmx* by default) and an html file will be created in the specified location (*html/index.html* by default). The user can then open the html file (with the web browser of his/her choice) to verify the accuracy of the classification and correct it if needed. 
+The check-boxes in the *Index* column (left) allow to select and deselect by row and the check-boxes in the *Comment* column (right) allow to select and unselect all rows with the same annotation/class.
+A button on the bottom of the html page will allow to save the final tmx file to the location of his/her choice.
 
 ![User html platform](./paper/visual.png)
 
