@@ -5,7 +5,7 @@
 
 ### OSTI requirements
 
-The library works with python 3.6+ and the depencies can be installed by EITHER executing the setup.py file using python :
+The library works with python 3.6+ and the depencies can be installed by EITHER executing the setup.py file using python (recommended) :
 
 ```bash
 python setup.py

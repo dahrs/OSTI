@@ -20,3 +20,10 @@ try:
     subprocess.check_call([sys.executable, "-m", "pip", "install", "fast-bpe"])
 except subprocess.CalledProcessError:
     pass
+
+subprocess.check_call(["gzip", "-dk",
+                       "./resources/classifiers/bal_train_7M_scoresAndMetaData_rdmForest.pickle.gz"])
+subprocess.check_call(["gzip", "-dk",
+                       "./resources/classifiers/bal_train_7M_scoresAndMetaData_svm.pickle.gz"])
+subprocess.check_call(["gzip", "-dk",
+                       "./resources/classifiers/bal_train_7M_scores_rdmForest.pickle.gz"])

@@ -63,10 +63,10 @@ def appendAdditionalFeat(featList):
 
 def loadRfModel():
     try:
-        rfModel = loadModel("./resources/classifiers/bal_train_7M_scoresAndMetaData_rdmForest.pickle.gz")
+        rfModel = loadModel("./resources/classifiers/bal_train_7M_scoresAndMetaData_rdmForest.pickle")
     except FileNotFoundError:
         try:
-            rfModel = loadModel("../resources/classifiers/bal_train_7M_scoresAndMetaData_rdmForest.pickle")
+            rfModel = loadModel("../resources/classifiers/bal_train_7M_scoresAndMetaData_rdmForest.pickle.gz")
         except MemoryError:
             try:
                 rfModel = loadModel("./resources/classifiers/train_35K_scoresAndMetaData_rdmForest.pickle")
@@ -77,10 +77,10 @@ def loadRfModel():
 
 def loadSvmModel():
     try:
-        svmModel = loadModel("./resources/classifiers/bal_train7M_scores_svm.pickle.gz")
+        svmModel = loadModel("./resources/classifiers/bal_train7M_scores_svm.pickle")
     except FileNotFoundError:
         try:
-            svmModel = loadModel("../resources/classifiers/bal_train7M_scores_svm.pickle")
+            svmModel = loadModel("../resources/classifiers/bal_train7M_scores_svm.pickle.gz")
         except MemoryError:
             try:
                 svmModel = loadModel("./resources/classifiers/train_35K_scores_svm.pickle")
