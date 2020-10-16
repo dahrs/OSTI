@@ -5,6 +5,7 @@ import os
 import re
 import time
 import nltk
+import logging
 import datetime
 import subprocess
 from bin.classifier import loadRfModel
@@ -15,6 +16,7 @@ from bin.metaheuristics import getBoolAndTypePreds
 try:
     from resources.vecalign.vecalign_wrap import makeVecAlign
 except ImportError:
+    logging.error("Unable to locate VecAlign from the resources directory")
     pass
 
 
@@ -176,7 +178,7 @@ def getYasaAlign(srcFilePath, trgtFilePath, outputFolderPath="./tmp/"):
     return srcOutputPath, trgtOutputPath
 
 
-def getFlag(classif, srcLn, trgtLn, langOrder, noErrLst=None, errLst=None):
+def getFlag(classif, srcLn, trgtLn, langOrder, noErrLst=None, errLst=None, classifModel=None):
     noErrLst = [] if noErrLst is None else noErrLst
     errLst = [] if errLst is None else errLst
     # no need to classify
@@ -205,15 +207,15 @@ def getFlag(classif, srcLn, trgtLn, langOrder, noErrLst=None, errLst=None):
             boolClass = "silence"
     # if a different classifier must be applied
     elif classif in ["randomforest", "svm"]:
-        if classif == "randomforest":
-            classifModel = loadRfModel()
-        elif classif == "svm":
-            classifModel = loadSvmModel()
-        else:
-            classifModel = None
+        if classifModel is None:
+            if classif == "randomforest":
+                classifModel = loadRfModel()
+            elif classif == "svm":
+                classifModel = loadSvmModel()
         # get the boolean class in a human-readeable way
         boolClass = getBoolClassifPred(heurSc4Feat, classif, classifModel, humanReadable=True)
     else:
+        logging.critical("Unknown classifier {0}. Supported values: 'none', 'metaheuristic', 'randomforest', 'svm', 'laser'".format(classif))
         raise ValueError("Unknown classifier {0}. Supported values: 'none', 'metaheuristic', 'randomforest', 'svm', 'laser'".format(classif))
     # get
     if boolClass == "no_error" and typeClass[0] == "no_error":
@@ -238,16 +240,20 @@ def fromAlignTxtToTmx(srcSegmentPath, trgtSegmentPath, srcAlignedPath, trgtAlign
         srcAlignLns = srcFile.readlines()
     with open(trgtAlignedPath) as trgtFile:
         trgtAlignLns = trgtFile.readlines()
+    classifModel = None
     # LASER
     # starttime = time.time()  ##################################
     # if the classifier was not specified use LASER as the default
     if classif in [True, None]:
         if laserClassif is None:
             try:
+                logging.info("Loading LASER classifier")
                 noErrLst, errLst = getLaserAlignAndClassif(srcSegmentPath, trgtSegmentPath, langOrder,
                                                            outputFolderPath="./tmp/")
             # LASER is the default but if laser does not work, swap to SVM
             except FileNotFoundError:
+                logging.error("LASER classifier not found or faulty, switching to SVM")
+                print("LASER classifier not found or faulty, switching to SVM")
                 classif = "svm"
                 noErrLst, errLst = None, None
         else:
@@ -255,15 +261,27 @@ def fromAlignTxtToTmx(srcSegmentPath, trgtSegmentPath, srcAlignedPath, trgtAlign
     # if the classifier was specified as LASER
     elif classif in ["laser"]:
         if laserClassif is None:
+            logging.info("Loading LASER classifier")
             noErrLst, errLst = getLaserAlignAndClassif(srcSegmentPath, trgtSegmentPath, langOrder,
                                                        outputFolderPath="./tmp/")
         else:
             noErrLst, errLst = laserClassif
+    # if the classifier was specified as random forest
+    elif classif == "randomforest":
+        logging.info("Loading Random Forest classifier")
+        classifModel = loadRfModel()
+    # if the classifier was specified as svm
+    elif classif == "svm":
+        logging.info("Loading SVM classifier")
+        classifModel = loadSvmModel()
+    # if the classifier was specified as metaheuristics
+    elif classif == "metaheuristic":
+        logging.info("Setting Metaheuristic as classifier")
     # get flag for each aligned line
     for srcLn, trgtLn in zip(srcAlignLns, trgtAlignLns):
         srcLn, trgtLn = srcLn.replace("\n", ""), trgtLn.replace("\n", "")
         # get the flag, if there is one
-        flag = getFlag(classif, srcLn, trgtLn, langOrder, noErrLst, errLst)
+        flag = getFlag(classif, srcLn, trgtLn, langOrder, noErrLst, errLst, classifModel)
         # print("CLASSIFIER", time.time() - starttime)  ##################################
         # add tmx line by line
         if rmEmptyLns is True and srcLn in ["", " "] and trgtLn in ["", " "]:
@@ -326,9 +344,11 @@ def getVecAlign(srcPath, trgtPath, langOrder, txtSrcOutputPath=None, txtTrgtOutp
                             outTrgt.write("{0}\n".format(" ".join(alTrgtLn)))
     return txtSrcOutputPath, txtTrgtOutputPath
 
+
 def removeEmbed(path="./embed/"):
     for filePath in ["{0}{1}".format(path, file) for file in os.listdir(path)]:
         os.remove(filePath)
+
 
 def segmentAlignMakeTmx(srcFilePath, trgtFilePath, langOrder, aligner=True, classif=True, outputTmxPath=None):
     # remove content of embedding folder
@@ -338,10 +358,12 @@ def segmentAlignMakeTmx(srcFilePath, trgtFilePath, langOrder, aligner=True, clas
     # yasa aligner
     starttime = time.time() #########################################
     if aligner not in ["vecaligner", True]:
+        logging.info("Starting YASA aligner")
         srcAlignedPath, trgtAlignedPath = getYasaAlign(srcSegmPath, trgtSegmPath)
         lsrClassif = None
     # vecaligner (laser) aligner
     else:
+        logging.info("Starting VecAlign aligner")
         srcAlignedPath, trgtAlignedPath = getVecAlign(srcSegmPath, trgtSegmPath, langOrder)
         lsrClassif = None
     print("ALIGNER", time.time() - starttime) ##################################

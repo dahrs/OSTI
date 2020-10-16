@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 
+import logging
 from random import randint
 from shutil import copyfile
 import xml.etree.ElementTree as ET
@@ -177,6 +178,7 @@ def makeHtmlFromTmx(tmxFilePath, outputPath=None, verbose=False):
             try:
                 copyfile("../resources/css/styles.css", "/".join(outputPath.split("/")[:-1] + ["styles.css"]))
             except FileNotFoundError:
+                logging.error("Appearance of HTML page may be disturbed: styles.css file not found in resources/css/")
                 pass
         # copy the javascript stylesheet
         try:
@@ -185,5 +187,6 @@ def makeHtmlFromTmx(tmxFilePath, outputPath=None, verbose=False):
             try:
                 copyfile("../resources/javascript/app.js", "/".join(outputPath.split("/")[:-1] + ["app.js"]))
             except FileNotFoundError:
+                logging.error("Appearance of HTML page may be disturbed: app.js file not found in resources/css/")
                 pass
     return htmlPage

@@ -2,6 +2,7 @@
 # -*- coding:utf-8 -*-
 
 import time
+import logging
 import argparse
 from bin.txt2tmx import segmentAlignMakeTmx
 from bin.tmx2html import makeHtmlFromTmx
@@ -60,7 +61,7 @@ if __name__ == '__main__':
                         yasa, vecalign, None (yasa by default)""")
     parser.add_argument("-cls", "--classifier", type=str, default="None",
                         help="""string indicating what classifier should the script use to show potential errors: 
-                        metaheuristic, randomforest, svm, laser, None (laser by default, unless badly configured)""")
+                        metaheuristic, randomforest, svm, laser, none (laser by default, unless badly configured)""")
     args = parser.parse_args()
 
     classifDict = {"metaheuristic": "metaheuristic", "meta": "metaheuristic", "metah": "metaheuristic",
@@ -76,15 +77,27 @@ if __name__ == '__main__':
     outHtml = "./html/" if args.outputfolder == "None" else args.outputfolder
     outTmx = None if args.outputtmx == "None" else args.outputtmx
 
-    if classif is None:
-        print("Non-specified or unsupported classifier, switching to LASER")
+    # make a log file to add warnings and errors
+    fmtstr = " %(asctime)s: (%(filename)s): %(levelname)s: %(funcName)s Line: %(lineno)d - %(message)s"
+    logging.basicConfig(filename="OSTI_d.log", level=logging.DEBUG, filemode="w",
+                        format=fmtstr, datefmt="%Y-%m-%d %I:%M:%S %p ")
 
+    logging.info("Started running")
     startTime = time.time()
+
+    if classif is None:
+        if args.classifier.lower() == "none":
+            logging.info("Non-specified classifier, switching to LASER")
+            print("Non-specified classifier, switching to LASER")
+        else:
+            logging.info("Unsupported classifier, switching to LASER. Supported values: 'none', 'metaheuristic', 'randomforest', 'svm', 'laser'")
+            print("Unsupported classifier, switching to LASER. Supported values: \n    none\n    metaheuristic\n    randomforest\n    svm\n    laser")
 
     launchIt(inSrc, inTrgt, [srcLang, trgtLang], aligner, classif, outHtml, outTmx)
 
     # print the time the algorithm took to run
     print(u'\nTIME IN SECONDS ::', time.time() - startTime)
+    logging.info("Finished running. TIME IN SECONDS :: {0}".format(time.time() - startTime))
 
 
 

@@ -36,9 +36,7 @@ For an optimal use of the aligners and classifiers of this system, it is recomme
   * https://github.com/thompsonb/vecalign/archive/master.zip 
   * or  https://github.com/thompsonb/vecalign
 * **LASER** : 
-  * https://github.com/bhardwaj1230/LASER---CorpusCleaning-Classification
-  * or https://github.com/facebookresearch/LASER/archive/master.zip
-  * or  https://github.com/facebookresearch/LASER
+  * https://github.com/bhardwaj1230/LASER---CorpusCleaning-Classification (we do not recommend to download from the original source https://github.com/facebookresearch/LASER, as it can change with time and would require specialized modifications)
 
 Follow the instructions to install each of them :
 * **VecAlign** : https://github.com/thompsonb/vecalign/blob/master/README.md
@@ -74,7 +72,7 @@ The available argument flags are :
 * *-ali* or *--aligner* : (optional, YASA \[yasa\] by default), string indicating what aligner should the script use. Accepted values : *yasa*, *vecalign*.
 * *-cls* or *--classifier* : (optional, LASER \[laser\] by default), string indicating what classifier should the script use. Accepted values : *laser*, *randomforest*, *svm*, *metaheuristic*.
 
-* *-tmx* or *--outputtmx* : (optional, unspecified by default), path to the intermediary tmx file. If the file is unspecified, the system will overwrite the temporary files at *tmp/aligned.tmx* and *tmp/aligned_all_labeled.tmx*. If a file is specified, then the system will create a file with a name ending in "*_aligned.tmx*" in the same folder. This file contains the data from the specified tmx file and the new data classified as GOOD. This "*_aligned.tmx*" file serves as a ready-made Translation Memory, requiring no further annotation. Another file with a name ending in "*_all_labeled.tmx*" will be created in the same folder. It will contain both GOOD and BAD sentence pairs and serve as reference as base for the html file (see below).
+* *-tmx* or *--outputtmx* : (optional, unspecified by default), path to the intermediary tmx file. If the file is unspecified, the system will overwrite the temporary files at *tmp/aligned.tmx* and *tmp/aligned_all_labeled.tmx*. If a file is specified, then the system will create a file with a name ending in "*_aligned.tmx*" in the same folder. This file contains the data from the specified tmx file and the new data classified as GOOD. This "*_aligned.tmx*" file serves as a ready-made Translation Memory, requiring no further annotation. Another file with a name ending in "*_all_labeled.tmx*" will be created in the same folder. It will contain both GOOD and BAD sentence pairs and serve as reference and base for the html file (see below).
 * *-html* or *--outputfolder* : (optional, unspecified by default), path to the html file that serves as user platform. It is advised to leave this argument undefined, in which case, the system will overwrite the existing file at *html/index.html*. The user can open the file *html/index.html* in any web browser to manually select what sentences or classes of sentences should end up in the final tmx file.
 
 
