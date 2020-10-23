@@ -248,6 +248,7 @@ def fromAlignTxtToTmx(srcSegmentPath, trgtSegmentPath, srcAlignedPath, trgtAlign
         if laserClassif is None:
             try:
                 logging.info("Loading LASER classifier")
+                classif = "laser"
                 noErrLst, errLst = getLaserAlignAndClassif(srcSegmentPath, trgtSegmentPath, langOrder,
                                                            outputFolderPath="./tmp/")
             # LASER is the default but if laser does not work, swap to SVM
@@ -278,7 +279,7 @@ def fromAlignTxtToTmx(srcSegmentPath, trgtSegmentPath, srcAlignedPath, trgtAlign
     elif classif == "metaheuristic":
         logging.info("Setting Metaheuristic as classifier")
     # get flag for each aligned line
-    for srcLn, trgtLn in zip(srcAlignLns, trgtAlignLns):
+    for i, (srcLn, trgtLn) in enumerate(zip(srcAlignLns, trgtAlignLns)):
         srcLn, trgtLn = srcLn.replace("\n", ""), trgtLn.replace("\n", "")
         # get the flag, if there is one
         flag = getFlag(classif, srcLn, trgtLn, langOrder, noErrLst, errLst, classifModel)
