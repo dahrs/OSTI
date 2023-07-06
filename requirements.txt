@@ -1,5 +1,5 @@
-﻿nltk==3.4.5
-scipy==1.4.1
+nltk==3.4.5
+scipy==1.10.0
 numpy==1.19.0
 Cython==0.29.17
 pandas==1.0.1
